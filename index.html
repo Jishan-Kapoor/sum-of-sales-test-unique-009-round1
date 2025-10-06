@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Summary test</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+<style>
+  body { padding: 20px; }
+</style>
+</head>
+<body>
+<div id="total-sales"></div>
+<script>
+  fetch('data.csv')
+    .then(response => response.text())
+    .then(data => {
+      const salesArray = data.split('\n').map(row => row.split(',')[1] || 0);
+      const totalSales = salesArray.reduce((acc, cur) => acc + parseFloat(cur), 0);
+      document.getElementById('total-sales').textContent = `Total Sales: $${totalSales.toFixed(2)}`;
+    });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (document.title === 'Sales Summary test') {
+      const bootstrapLoaded = !!document.querySelector('link[href*="bootstrap"]');
+      const totalSalesValue = parseFloat(document.querySelector('#total-sales').textContent.substring(13));
+      
+      if (bootstrapLoaded && Math.abs(totalSalesValue - 100) < 0.01) {
+        console.log('All checks pass.');
+      } else {
+        console.error('Checks failed.');
+      }
+    }
+  });
+</script>
+</body>
+</html>
